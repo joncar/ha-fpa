@@ -1,0 +1,14 @@
+turn_on:
+  name: Start bottle
+  description: "Start making a bottle."
+  target:
+    entity:
+      integration: fpa
+      domain: sensor
+  fields:
+    bottle_id:
+      name: Bottle ID
+      description: ID of the bottle.
+      required: true
+      selector:
+        text:
