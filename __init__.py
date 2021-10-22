@@ -1,4 +1,4 @@
-"""The Snoo integration."""
+"""The Fpa integration."""
 from __future__ import annotations
 
 import logging
