@@ -1,13 +1,14 @@
 {
   "state": {
     "fpa__state": {
+      "requesting_bottle": "Requesting Bottle",
       "making_bottle": "Making Bottle",
+      "full_bottle": "Full Bottle",
       "funnel_cleaning_needed": "Funnel Cleaning Needed",
       "funnel_out": "Funnel Out",
       "lid_open": "Lid Open",
       "low_water": "Low Water",
       "bottle_missing": "Bottle Missing",
-      "water_only": "Water Only",
       "ready": "Ready"
     }
   }

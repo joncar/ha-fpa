@@ -13,6 +13,17 @@ from .const import DOMAIN, ATTR_BOTTLE_ID
 
 _LOGGER = logging.getLogger(__name__)
 
+STATE_TO_ICON = {
+    "requesting_bottle": "mdi:sprinkler-fire",
+    "making_bottle": "mdi:sprinkler-fire",
+    "full_bottle": "mdi:cup",
+    "funnel_cleaning_needed": "mdi:liquid-spot",
+    "funnel_out": "mdi:filter-off-outline",
+    "lid_open": "mdi:projector-screen-variant-off-outline",
+    "low_water": "mdi:water-off",
+    "bottle_missing": "mdi:cup-off-outline",
+    "ready": "mdi:cup-outline"
+}
 
 async def async_setup_entry(
     hass, config_entry, async_add_entities, discovery_info=None
@@ -43,17 +54,40 @@ class FpaSensor(SensorEntity):
     _api: pyfpa.Fpa
     _device: pyfpa.FpaDevice
 
+    _making_bottle_requested: bool # between start API call and making_bottle shadow update
+    _full_bottle: bool # between making_bottle shadow update and bottle_missing shadow update
+    _old_making_bottle: bool
+    _old_bottle_missing: bool
+
     def __init__(self, api, device):
         """Initialize the sensor."""
         self._api = api
         self._device = device
+        self._making_bottle_requested = False
+        self._full_bottle = False
 
     async def async_added_to_hass(self):
         """Run when this Entity has been added to HA."""
 
+        self._old_making_bottle = False
+        self._old_bottle_missing = False
+
         def updated_callback(device: pyfpa.FpaDevice):
             if device.device_id != self._device.device_id:
                 return
+
+            if not self._old_making_bottle and device.shadow.making_bottle:
+                self._making_bottle_requested = False
+
+            if self._old_making_bottle and not device.shadow.making_bottle:
+                self._full_bottle = True
+
+            if not self._old_bottle_missing and device.shadow.bottle_missing:
+                self._making_bottle_requested = False
+                self._full_bottle = False
+
+            self._old_making_bottle = device.shadow.making_bottle
+            self._old_bottle_missing = device.shadow.bottle_missing
 
             self._device = device
             self.schedule_update_ha_state()
@@ -91,6 +125,11 @@ class FpaMainSensor(FpaSensor):
     _attr_device_class = "fpa__state"
 
     @property
+    def assumed_state(self):
+        """Return if data is from assumed state."""
+        return self._making_bottle_requested
+
+    @property
     def unique_id(self):
         """Return the unique id of the sensor."""
         return self._device.device_id
@@ -103,27 +142,17 @@ class FpaMainSensor(FpaSensor):
     @property
     def icon(self):
         """Return the icon of the sensor."""
-        if self._device.shadow.making_bottle:
-            return "mdi:cup"
-        if self._device.shadow.funnel_cleaning_needed:
-            return "mdi:liquid-spot"
-        if self._device.shadow.funnel_out:
-            return "mdi:filter-off-outline"
-        if self._device.shadow.lid_open:
-            return "mdi:filter-off"
-        if self._device.shadow.low_water:
-            return "mdi:water-off"
-        if self._device.shadow.bottle_missing:
-            return "mdi:cup-off-outline"
-        if self._device.shadow.water_only:
-            return "mdi:cup-water"
-        return "mdi:coffee-maker"
+        return STATE_TO_ICON[self.state]
 
     @property
     def state(self):
         """Return the state of the sensor."""
-        if self._device.shadow.making_bottle:
+        if self._making_bottle_requested: # only useful for testing?
+            return "requesting_bottle"
+        if self._making_bottle_requested or self._device.shadow.making_bottle:
             return "making_bottle"
+        if self._full_bottle:
+            return "full_bottle"
         if self._device.shadow.funnel_cleaning_needed:
             return "funnel_cleaning_needed"
         if self._device.shadow.funnel_out:
@@ -134,8 +163,6 @@ class FpaMainSensor(FpaSensor):
             return "low_water"
         if self._device.shadow.bottle_missing:
             return "bottle_missing"
-        if self._device.shadow.water_only:
-            return "water_only"
         return "ready"
 
     @property
@@ -163,5 +190,16 @@ class FpaMainSensor(FpaSensor):
     async def turn_on(self, **kwargs):
         """Service call to start making a bottle."""
         bottle_id = kwargs.get(ATTR_BOTTLE_ID)
+
+        # Cloud API will ignore a start for all cases where the attributes
+        # track a disallowed state like lid open or bottle missing.
+        # However it does not attempt to track if the bottle has been
+        # filled and has not been removed, so guard against that
+        # (and all other) disallowed states here.
+        if self.state != "ready":
+            _LOGGER.error(f"Cannot start bottle when in state {self.state}")
+            return
+
         _LOGGER.info(f"Starting bottle {bottle_id}!")
+        self._making_bottle_requested = True
         await self._api.start_bottle(bottle_id)
