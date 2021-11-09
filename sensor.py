@@ -14,8 +14,8 @@ from .const import DOMAIN, ATTR_BOTTLE_ID
 _LOGGER = logging.getLogger(__name__)
 
 STATE_TO_ICON = {
-    "requesting_bottle": "mdi:sprinkler-fire",
-    "making_bottle": "mdi:sprinkler-fire",
+    "requesting_bottle": "mdi:transfer-down",
+    "making_bottle": "mdi:transfer-down",
     "full_bottle": "mdi:cup",
     "funnel_cleaning_needed": "mdi:liquid-spot",
     "funnel_out": "mdi:filter-off-outline",
@@ -79,7 +79,7 @@ class FpaSensor(SensorEntity):
             if not self._old_making_bottle and device.shadow.making_bottle:
                 self._making_bottle_requested = False
 
-            if self._old_making_bottle and not device.shadow.making_bottle:
+            if self._old_making_bottle and not device.shadow.making_bottle and not device.shadow.bottle_missing:
                 self._full_bottle = True
 
             if not self._old_bottle_missing and device.shadow.bottle_missing:

@@ -4,7 +4,7 @@
   "config_flow": true,
   "documentation": "https://github.com/joncar/ha-fpa",
   "requirements": [
-    "git+https://github.com/joncar/pyfpa.git@main#pyfpa==0.0.3"
+    "git+https://github.com/joncar/pyfpa.git@main#pyfpa==0.0.4"
   ],
   "ssdp": [],
   "zeroconf": [],
@@ -14,5 +14,5 @@
     "@joncar"
   ],
   "iot_class": "cloud_push",
-  "version": "0.0.1"
+  "version": "0.0.4"
 }
