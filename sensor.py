@@ -5,7 +5,7 @@ import voluptuous as vol
 from homeassistant.components.sensor import STATE_CLASS_MEASUREMENT, SensorEntity
 from homeassistant.const import DEVICE_CLASS_TIMESTAMP, SERVICE_TURN_ON
 from homeassistant.helpers import config_validation as cv, entity_platform
-import pyfpa
+import pybabyfpa
 
 from homeassistant.helpers.entity import DeviceInfo
 
@@ -51,8 +51,8 @@ async def async_setup_entry(
 class FpaSensor(SensorEntity):
     """Representation of a Fpa sensor."""
 
-    _api: pyfpa.Fpa
-    _device: pyfpa.FpaDevice
+    _api: pybabyfpa.Fpa
+    _device: pybabyfpa.FpaDevice
 
     _making_bottle_requested: bool # between start API call and making_bottle shadow update
     _full_bottle: bool # between making_bottle shadow update and bottle_missing shadow update
@@ -72,7 +72,7 @@ class FpaSensor(SensorEntity):
         self._old_making_bottle = False
         self._old_bottle_missing = False
 
-        def updated_callback(device: pyfpa.FpaDevice):
+        def updated_callback(device: pybabyfpa.FpaDevice):
             if device.device_id != self._device.device_id:
                 return
 

@@ -5,7 +5,7 @@ import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-import pyfpa
+import pybabyfpa
 
 from .const import DOMAIN
 
@@ -16,7 +16,7 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Fpa from a config entry."""
-    api = pyfpa.Fpa()
+    api = pybabyfpa.Fpa()
     await api.refresh(entry.data["refresh_token"])
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = api
