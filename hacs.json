@@ -1,0 +1,9 @@
+{
+    "name": "Formula Pro Advanced WiFi",
+    "domains": [
+        "sensor"
+    ],
+    "homeassistant": "2021.11.0",
+    "content_in_root": true,
+    "render_readme": true
+}

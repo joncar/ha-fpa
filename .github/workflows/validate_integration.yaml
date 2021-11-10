@@ -1,4 +1,4 @@
-name: Validate with hassfest
+name: Validate integration
 
 on:
   push:
@@ -14,3 +14,7 @@ jobs:
         with:
           path: fpa
       - uses: home-assistant/actions/hassfest@master
+      - name: HACS validation
+        uses: "hacs/action@main"
+        with:
+          category: "integration"
