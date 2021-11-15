@@ -4,7 +4,7 @@
   "config_flow": true,
   "documentation": "https://github.com/joncar/ha-fpa",
   "requirements": [
-    "pybabyfpa==0.0.5"
+    "pybabyfpa==0.0.6"
   ],
   "ssdp": [],
   "zeroconf": [],
@@ -14,5 +14,5 @@
     "@joncar"
   ],
   "iot_class": "cloud_push",
-  "version": "0.0.5"
+  "version": "0.0.6"
 }
