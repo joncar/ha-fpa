@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import pyfpa
+import pybabyfpa
 import voluptuous as vol
 
 from homeassistant import config_entries
@@ -30,11 +30,11 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     Data has the keys from STEP_USER_DATA_SCHEMA with values provided by the user.
     """
 
-    api = pyfpa.Fpa()
+    api = pybabyfpa.Fpa()
 
     try:
         await api.login(data["email"], data["password"])
-    except pyfpa.FpaError:
+    except pybabyfpa.FpaError:
         raise InvalidAuth
 
     # If you cannot connect:
