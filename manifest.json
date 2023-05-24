@@ -1,18 +1,18 @@
 {
   "domain": "fpa",
   "name": "Formula Pro Advanced WiFi",
+  "codeowners": [
+    "@joncar"
+  ],
   "config_flow": true,
+  "dependencies": [],
   "documentation": "https://github.com/joncar/ha-fpa",
+  "homekit": {},
+  "iot_class": "cloud_push",
   "requirements": [
     "pybabyfpa==0.0.6"
   ],
   "ssdp": [],
-  "zeroconf": [],
-  "homekit": {},
-  "dependencies": [],
-  "codeowners": [
-    "@joncar"
-  ],
-  "iot_class": "cloud_push",
   "version": "0.0.7"
+  "zeroconf": []
 }
