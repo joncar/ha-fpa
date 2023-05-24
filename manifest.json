@@ -9,10 +9,11 @@
   "documentation": "https://github.com/joncar/ha-fpa",
   "homekit": {},
   "iot_class": "cloud_push",
+  "issue_tracker": "https://github.com/joncar/ha-fpa/issues",
   "requirements": [
     "pybabyfpa==0.0.6"
   ],
   "ssdp": [],
-  "version": "0.0.7",
+  "version": "0.0.8",
   "zeroconf": []
 }
