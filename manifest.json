@@ -13,6 +13,6 @@
     "pybabyfpa==0.0.6"
   ],
   "ssdp": [],
-  "version": "0.0.7"
+  "version": "0.0.7",
   "zeroconf": []
 }
