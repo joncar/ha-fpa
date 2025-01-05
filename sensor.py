@@ -2,12 +2,10 @@
 import logging
 import voluptuous as vol
 
-from homeassistant.components.sensor import STATE_CLASS_MEASUREMENT, SensorEntity
-from homeassistant.const import DEVICE_CLASS_TIMESTAMP, SERVICE_TURN_ON
+from homeassistant.components.sensor import SensorEntity
+from homeassistant.const import SERVICE_TURN_ON
 from homeassistant.helpers import config_validation as cv, entity_platform
 import pybabyfpa
-
-from homeassistant.helpers.entity import DeviceInfo
 
 from .const import DOMAIN, ATTR_BOTTLE_ID
 
