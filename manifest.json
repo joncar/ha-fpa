@@ -11,9 +11,9 @@
   "iot_class": "cloud_push",
   "issue_tracker": "https://github.com/joncar/ha-fpa/issues",
   "requirements": [
-    "pybabyfpa==0.0.6"
+    "pybabyfpa==0.0.7"
   ],
   "ssdp": [],
-  "version": "0.0.8",
+  "version": "0.7.0",
   "zeroconf": []
 }
